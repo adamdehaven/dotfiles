@@ -44,17 +44,28 @@ function encrypt() {
 }
 
 #
+# Find commits by commit message
+# ---------------------------------------------------
+function fc() {
+  git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1
+}
+alias findcommit=fc
+
+#
 # Find files and directories
 # ---------------------------------------------------
 # Case insensitive file search, excluding node_modules and AppData directories
 function ff() {
   find . -type d \( -iname node_modules -o -iname AppData \) -prune -false -o -type f -iname "*$1*"
 }
+alias findfile=ff
 
 # Case insensitive directory search, excluding node_modules and AppData directories
 function fd() {
   find . -type d \( -iname node_modules -o -iname AppData \) -prune -false -o -type d -iname "*$1*"
 }
+alias finddirectory=fd
+alias findfolder=fd
 
 #
 # Count and display the number of commits in a Git repository, by author

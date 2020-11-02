@@ -9,7 +9,7 @@
     git init --bare $HOME/dotfiles
     ```
 
-2. Add a `.dotfiles-local-settings` file in your `$HOME` directory. This file will be the home for any alises, functions, values, etc. that you **do not** want to commit to the repository. I typically use this file for things like machine-specific path aliases. For example:
+2. Add a `.dotfiles-local-settings` file in your `$HOME` directory. This file will be the home for any alises, functions, values, etc. that you **do not** want to commit to the repository. I typically use this file for things like machine-specific values or aliases. For example:
 
     ``` sh
     # Create local settings file
@@ -19,12 +19,12 @@
     echo "alias dev=\"cd /d/adam/Development\"" >> $HOME/.dotfiles-local-settings
     ```
 
-    After creating this file, duplicate it, and rename the duplicate `.dotfiles-local-settings.example` and clear out the values. This way, when you clone the repository to a new machine, you have a template to use to define your machine-specific settings.
+    After creating this file and populating it with anything you'd like, and rename the duplicate file `.dotfiles-local-settings.example` and clear out the values. This way, when you clone the repository to a new machine, you have a template to use to define your machine-specific settings.
 
-3. Add a `.gitignore` to your `$HOME` directory to ensure it will ignore the `dotfiles` folder where the bare repository lives, as well as your local settings file that you do not want in version control:
+3. Add a `.gitignore` to your `$HOME` directory to ensure it will ignore the `dotfiles` folder where the bare repository lives, as well as your local settings file that you do not want in version control. You can also add any other files here you want to ensure do not get added:
 
     ``` sh
-    echo -e "dotfiles/\n.dotfiles-local-settings" >> $HOME/dotfiles/.gitignore
+    echo -e "dotfiles/\n.dotfiles-local-settings" >> $HOME/.gitignore
     ```
 
 4. Also add a `.gitignore` to this new repository to ensure it will ignore the folder where you'll eventually clone it on another machine (prevents weird recursion problems):
@@ -33,7 +33,7 @@
     echo "dotfiles/" >> $HOME/dotfiles/.gitignore
     ```
 
-5. Create an alias for running git commands in the `dotfiles` repository we just created:
+5. Create an alias for running git commands in the `dotfiles` repository we just created (you only need to use one of the methods shown here):
 
     ```sh
     # Windows
@@ -60,7 +60,7 @@
 7. Add the remote to the repository (change to the remote URL of your repo):
 
     ``` sh
-    dotfiles remote add origin git@github.com:adamdehaven/dotfiles.git
+    dotfiles remote add origin git@github.com:username/dotfiles.git
     ```
 
 8. Add the `.gitignore` we created to the repository:
@@ -75,7 +75,7 @@
     For example, to add your `.bashrc` file:
 
     ``` sh
-    dotfiles add .bashrc
+    dotfiles add $HOME/.bashrc
     dotfiles commit -m "Adding .bashrc"
     dotfiles push
     ```
@@ -83,8 +83,8 @@
     I like to add separate files for functions, aliases, etc. To add these files, I use a specific naming convention that makes it easy to add the files to the repository that looks like this: `.dotfiles-functions` and `.dotfiles-aliases`. Then, to add these files to source control, you can simply do this:
 
     ``` sh
-    dotfiles add .dotfiles-*
-    dotfiles commit -m "Adding custom files."
+    dotfiles add $HOME/.dotfiles-*
+    dotfiles commit -m "Adding custom files"
     dotfiles push
     ```
 
@@ -93,7 +93,7 @@
 1. Clone your dotfiles into a **bare** repository in your other computer's `$HOME` (change to the remote URL of your repo):
 
     ``` sh
-    git clone --bare git@github.com:adamdehaven/dotfiles.git $HOME/dotfiles
+    git clone --bare git@github.com:username/dotfiles.git $HOME/dotfiles
     ```
 
 2. Add the alias to the `.bashrc` or `.zshrc` on the new machine:
