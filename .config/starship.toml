@@ -1,0 +1,19 @@
+[directory]
+truncate_to_repo = true # Whether or not to truncate to the root of the git repo that you're currently in
+truncation_length = 10
+
+[hostname]
+ssh_only = true
+
+# [time]
+# format = "🕙 %l:%M:%S %p"
+# use_12hr = true
+# disabled = false
+
+[git_status]
+conflicted_count.enabled = true
+deleted_count.enabled = true
+modified_count.enabled = true
+renamed_count.enabled = true
+staged_count.enabled = true
+untracked_count.enabled = true

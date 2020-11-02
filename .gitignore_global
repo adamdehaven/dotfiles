@@ -1,0 +1,35 @@
+dotfiles/
+# ignore thumbnails created by windows
+Thumbs.db
+# ignore thumbnails created by mac
+.DS_Store
+#ignore package files
+node_modules
+# Log files
+*.log
+# Map files
+*.map
+# ignore files build by Visual Studio
+*.obj
+*.exe
+*.pdb
+*.user
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.cache
+*.ilk
+*.log
+*.dll
+*.lib
+*.sbr
+*.temp
+# Secure
+.env

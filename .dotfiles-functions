@@ -1,0 +1,267 @@
+#!/bin/bash
+
+#
+# Edit .bashrc in VS Code, and reload file in prompt on EXIT
+# ---------------------------------------------------
+function bashrc() {
+  code ~/.bashrc
+}
+
+#
+# Edit .bash_profile in VS Code, and reload file in prompt on EXIT
+# ---------------------------------------------------
+function bashprofile() {
+  code ~/.bash_profile
+}
+
+#
+# Edit Windows HOSTS file
+# ---------------------------------------------------
+function edithosts() {
+  # open file in VS Code
+  code /c/Windows/System32/drivers/etc/hosts
+}
+
+#
+# Encryption
+# ---------------------------------------------------
+function decrypt() {
+  # decrypt if selected
+  FILE=$1
+  echo "-> decrypt: $(basename $FILE) "
+  openssl enc -d -aes-256-cbc -salt -in "$FILE" -out "${FILE/.enc/}"
+  FILE=""
+}
+
+function encrypt() {
+  # encrypt if selected
+  FILE=$1
+  echo "-> encrypt: $(basename $FILE) "
+  openssl enc -e -aes-256-cbc -salt -in "$FILE" -out "$FILE.enc"
+  FILE=""
+}
+
+#
+# Find files and directories
+# ---------------------------------------------------
+function ff() {
+  find . -type f -name "*$1*"
+}
+
+function fd() {
+  find . -type d -name "*$1*"
+}
+
+#
+# Count and display the number of commits in a Git repository, by author
+# The -s option squashes all of the commit messages into the number of commits.
+# The -n option sorts the list by number of commits.
+# Add -e flag to also show email address.
+# ---------------------------------------------------
+commitcount() {
+  # If git repo
+  if response=$(git rev-parse --is-inside-work-tree &>/dev/null) && [ $response=true ]; then
+    git shortlog -sne --no-merges
+  else
+    echo "Error: This is not a git repository."
+  fi
+}
+
+#
+# Display the current git repository's log, by author's name or email address
+# ---------------------------------------------------
+logbyauthor() {
+  # If git repo
+  if response=$(git rev-parse --is-inside-work-tree &>/dev/null) && [ $response=true ]; then
+    if [ $# -gt 0 ]; then
+      git log --author="$1" --oneline --shortstat
+    else
+      echo "Error: You must specify the author's name or email address."
+    fi
+  else
+    echo "Error: This is not a git repository."
+  fi
+}
+
+#
+# Check if program exists from bash
+# ---------------------------------------------------
+caniuse() {
+  if [ "${*:1}" ] >0; then
+    eval PROGRAM='${*:1}'
+  else
+    while true; do
+      read -p "#    Command: " PROGRAM
+      case "$PROGRAM" in
+      [[:alnum:]]*)
+        eval PROGRAM='$PROGRAM'
+        break
+        ;;
+      *) echo "#        Please enter a valid command." ;;
+      esac
+    done
+  fi
+
+  if [ -x "$(command -v $PROGRAM)" ]; then
+    echo "'$PROGRAM' command is available."
+  else
+    echo "'$PROGRAM' command is not available."
+  fi
+}
+
+#
+# Remove parenthesis, text inside, and trailing space from all files in current directory
+# ---------------------------------------------------
+function removeParenthesisInAllFiles() {
+  for f in *'('*')'*; do mv -i "$f" "${f/(*)/}"; done
+}
+
+function renameFileWithRegex() {
+  # Change to whatever
+  regex='(.*) .sfc'
+  # Change file extension, then does replace
+  for f in *.sfc; do [[ $f =~ $regex ]] && mv "$f" "${BASH_REMATCH[1]}.sfc"; done
+}
+
+#
+# Post to Slack
+# ---------------------------------------------------
+posttoslack() {
+  # Set Slack webhook URL
+  SLACK_WEBHOOK_URL=""
+  # Prompt user for Slack #channel or @username
+  while true; do
+    read -p "#
+  #    Post to channel or username: " "CHANNEL"
+    case "$CHANNEL" in
+    [\#\@][[:lower:]-_]*)
+      eval SUCCESSMESSAGE="$CHANNEL"
+      eval CHANNEL='\"channel\":"\"$CHANNEL\"",'
+      break
+      ;;
+    *) echo "         Please enter a valid channel or username.
+#        Example: #general or @adamdehaven" ;;
+    esac
+  done
+  # Prompt user for "send as" name
+  while true; do
+    read -p "#    Post as: " USERNAME
+    case "$USERNAME" in
+    [nN][oO] | [dD][eE][fF][aA][uU][lL][tT])
+      eval USERNAME=""
+      break
+      ;;
+    [[:alnum:][:space:][:punct:]]*)
+      eval USERNAME='\"username\":"\"$USERNAME\"",'
+      break
+      ;;
+    *) echo "         Please enter a valid username (nothing offensive)." ;;
+    esac
+  done
+  # Prompt user for icon emoji
+  while true; do
+    read -p "#    Icon Emoji: " EMOJI
+    case "$EMOJI" in
+    [:][[:lower:]]*[:])
+      eval EMOJI='\"icon_emoji\":"\"$EMOJI\"",'
+      break
+      ;;
+    [nN][oO])
+      eval EMOJI=""
+      break
+      ;;
+    *) echo "         Please enter a valid emoji code. Example: :ghost:" ;;
+    esac
+  done
+  # Prompt user for icon emoji
+  while true; do
+    read -p "#    Icon Url: " ICONURL
+    case "$ICONURL" in
+    [http][[:alnum:][:punct:]]* | [https][[:alnum:][:punct:]]*)
+      eval ICONURL='\"icon_url\":"\"$ICONURL\"",'
+      break
+      ;;
+    [nN][oO])
+      eval ICONURL=""
+      break
+      ;;
+    *) echo "         Please enter a valid url." ;;
+    esac
+  done
+  # Prompt user for message
+  while true; do
+    read -r -p "#    Message to post: " MESSAGE
+    case "$MESSAGE" in
+    [[:alnum:][:blank:][:punct:][:space:]]*)
+      eval MESSAGE='\"text\":"\"$MESSAGE\""'
+      break
+      ;;
+    *) echo "         Please enter a valid message." ;;
+    esac
+  done
+  # Encode &, <, and > for Slack
+  MESSAGE=${MESSAGE//&/&amp;}
+  MESSAGE=${MESSAGE//</&lt;}
+  MESSAGE=${MESSAGE//>/&gt;}
+
+  apiResponse=$(curl -s -X POST -H 'Content-type: application/json' --data '{'"$CHANNEL""$USERNAME""$EMOJI""$ICONURL""$MESSAGE"'}' $SLACK_WEBHOOK_URL)
+
+  # Output response
+  if [ "$apiResponse" = "ok" ]; then
+    echo "#    Posted successfully to $SUCCESSMESSAGE"
+  else
+    echo "#    API ERROR: $apiResponse"
+  fi
+}
+
+#
+# VM - Access Homestead Globally
+# ---------------------------------------------------
+function homestead() {
+  (cd /d/Homestead && vagrant $*)
+}
+
+#
+# Copy ngrok share vm command to clipboard for pasting into Windows Command Prompt
+# ---------------------------------------------------
+function sharevm() {
+  # Prompt user for domain
+  read -e -p "Enter the domain (Example: example.loc ): " DOMAIN
+  eval DOMAIN=$DOMAIN
+  echo ngrok http 192.168.10.10:80 -host-header=$DOMAIN >/dev/clipboard
+  echo "#    ngrok statement copied to clipboard"
+  echo "#    Opening Windows Command Prompt..."
+  start cmd.exe
+}
+
+function shrug() {
+  echo "¯\_(ツ)_/¯"
+}
+
+#
+# SSH-AGENT INITIALIZATION
+# ---------------------------------------------------
+SSH_ENV="$HOME/.ssh/environment"
+
+function start_agent() {
+  echo "Initialising new SSH agent..."
+  /usr/bin/ssh-agent | sed 's/^echo/#echo/' >"${SSH_ENV}"
+  echo succeeded
+  chmod 600 "${SSH_ENV}"
+  . "${SSH_ENV}" >/dev/null
+
+  for k in $(find ~/.ssh -type f -name "*_rsa"); do
+    echo "Adding $k"
+    /usr/bin/ssh-add $k
+  done
+}
+
+# Source SSH settings, if applicable
+if [ -f "${SSH_ENV}" ]; then
+  . "${SSH_ENV}" >/dev/null
+  ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ >/dev/null || {
+    start_agent
+  }
+else
+  start_agent
+fi

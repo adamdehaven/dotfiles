@@ -1,0 +1,32 @@
+#!/bin/bash
+
+#
+# Dotfiles
+# ---------------------------------------------------
+# Windows alias
+alias dotfiles='/cmd/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
+# Mac alias
+# alias dotfiles='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
+# alias dotfiles='/usr/local/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
+
+#
+# Alias Locations
+# Some are imported in .localsettingsrc
+# ---------------------------------------------------
+
+#
+# Alias Commands
+# ---------------------------------------------------
+alias grep='grep --color=auto'
+# Open in Google Chrome: chrome ~/Desktop/index.html
+alias chrome='/c/Program\ Files\ \(x86\)/Google/Chrome/Application/chrome.exe'
+# Download file to ~/Downloads folder
+# Example: download http://link.zip
+alias download="cd ~/Downloads && curl -O -L "
+alias nah="git reset --hard && git clean -df"
+alias pi="ssh pi@192.168.0.107"
+
+# NPM cli packages
+alias pageres='cd ~/Downloads && pageres'
+alias carbon-now='carbon-now'
+alias emoj='emoj'

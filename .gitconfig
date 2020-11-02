@@ -1,0 +1,74 @@
+# core {{{
+[core]
+  autocrlf = true
+  excludesfile = ~/.gitignore_global
+#}}}
+# color {{{
+[color]
+  ui = auto
+  branch = auto
+  diff = auto
+  status = auto
+
+[color "branch"]
+  current = cyan reverse bold
+  local = cyan
+  remote = green
+
+[color "diff"]
+  meta = cyan bold
+  frag = magenta bold
+  old = red bold
+  new = green bold
+  plain = white
+
+[color "status"]
+  added = cyan
+  changed = yellow
+  untracked = red bold
+#}}}
+# push/pull/diff/options {{{
+[push]
+  default = simple
+#}}}
+# alias {{{
+[alias]
+  # List git aliases
+  alias = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ /
+  # Show all branches, local and remote
+  br = branch -ra
+  # Cleaned up pretty log
+  ls = log --pretty=tformat:"%C(green)%h\\ %C(yellow)[%ad]%Cred%d\\ %n%Creset%w(80,4,4)%s%b\\ %C(cyan)[%cN]%n" --decorate --date=local
+  # Same pretty log, with changed file list
+  lf = log --pretty=tformat:"%C(green)%h\\ %C(yellow)[%ad]%Cred%d\\ %n%Creset%w(80,4,4)%s%b\\ %C(cyan)[%cN]%n" --decorate --date=local --numstat
+  # Show files flagged --assume-unchanged
+  unchanged = !git ls-files -v | grep "^[[:lower:]]"
+  # Show the history of a file, with diffs
+  filelog = log -u
+  # Find a file path in codebase
+  findpath = "!git ls-files | grep -i"
+  # Search/grep your entire codebase for a string
+  search = grep -Ii
+  # List git-ignored files
+  ignored = ls-files . --ignored --exclude-standard --others
+  # List untracked files
+  untracked = ls-files . --exclude-standard --others
+  # Undo everything; throw away changes
+  nah = ! git reset --hard && git clean -df
+  # List tags in order, with message
+  t = tag -n9 --sort=-version:refname
+#}}}
+
+[log]
+  mailmap = true
+
+[mailmap]
+  file = ~/.mailmap
+
+[filter "lfs"]
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  required = true
+  process = git-lfs filter-process
+[winUpdater]
+  recentlySeenVersion = 2.25.0.windows.1
