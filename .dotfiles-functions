@@ -52,7 +52,7 @@ function fc() {
 alias findcommit=fc
 
 #
-# Find files and directories
+# Files and directories
 # ---------------------------------------------------
 # Case insensitive file search, excluding node_modules and AppData directories
 function ff() {
@@ -66,6 +66,11 @@ function fd() {
 }
 alias finddirectory=fd
 alias findfolder=fd
+
+# Create new directory and change current directory to it
+function mkd() {
+  mkdir -p "$@" && cd "$_"
+}
 
 #
 # Count and display the number of commits in a Git repository, by author
