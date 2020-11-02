@@ -46,14 +46,14 @@ function encrypt() {
 #
 # Find files and directories
 # ---------------------------------------------------
-# Case insensitive file search, excluding node_modules and lib directories
+# Case insensitive file search, excluding node_modules and AppData directories
 function ff() {
-  find . -type d \( -iname node_modules -o -iname lib \) -prune -false -o -type f -iname "*$1*"
+  find . -type d \( -iname node_modules -o -iname AppData \) -prune -false -o -type f -iname "*$1*"
 }
 
-# Case insensitive directory search, excluding node_modules and lib directories
+# Case insensitive directory search, excluding node_modules and AppData directories
 function fd() {
-  find . -type d \( -iname node_modules -o -iname lib \) -prune -false -o -type d -iname "*$1*"
+  find . -type d \( -iname node_modules -o -iname AppData \) -prune -false -o -type d -iname "*$1*"
 }
 
 #
