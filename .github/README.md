@@ -1,8 +1,6 @@
 # dotfiles
 
-Your computer's dotfiles are a key piece of your development environment. Many of us work on multiple computers throughout the day (e.g. work laptop, desktop at home, etc.) and managing to keep settings consistent across machines is a pain.
-
-In this post, I'll walk you through one way to synchronize and back up your dotfiles utilizing a git repository.
+Your computer's dotfiles are a key piece of your development environment. Many of us work on multiple computers throughout the day (e.g. work laptop, desktop at home, etc.) and managing to keep settings consistent across machines is a pain. I'll walk you through one way to synchronize and back up your dotfiles utilizing a git repository.
 
 ## Starting from scratch
 
