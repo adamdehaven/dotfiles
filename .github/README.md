@@ -11,17 +11,31 @@ Your computer's dotfiles are a key piece of your development environment. Many o
     git init --bare $HOME/dotfiles
     ```
 
-2. Add a `.dotfiles-local-settings` file in your `$HOME` directory. This file will be the home for any alises, functions, values, etc. that you **do not** want to commit to the repository. I typically use this file for things like machine-specific values or aliases. For example:
+2. Add a `.dotfiles-local-settings` file in your `$HOME` directory. This file will be the home for any aliases, functions, values, etc. that you **do not** want to commit to the repository. I typically use this file for things like machine-specific values or aliases. For example:
 
     ``` sh
     # Create local settings file
     touch $HOME/.dotfiles-local-settings
 
-    # This path may be different on my work computer
+    # The path to the development folder on this machine. This path may be different on my work computer
     echo "alias dev=\"cd /d/adam/Development\"" >> $HOME/.dotfiles-local-settings
     ```
 
     After creating this file and populating it with anything you'd like, duplicate it, and rename the duplicate file `.dotfiles-local-settings.example` and clear out the values. This way, when you clone the repository to a new machine, you have a template to use to define your machine-specific settings.
+
+    One important entry to place into this file is the `dotfiles` alias we will use to manage version control for our dotfiles. Let's add that now (you will only need one of the aliases below, depending on your computer):
+
+    ```sh
+    # Windows
+    alias dotfiles='/cmd/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' >> $HOME/.dotfiles-local-settings
+
+    # --------------------------------------------------------------------------- #
+
+    # Mac (depends on location of git)
+    alias dotfiles='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' >> $HOME/.dotfiles-local-settings
+    # or
+    alias dotfiles='/usr/local/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME' >> $HOME/.dotfiles-local-settings
+    ```
 
 3. Add a `.gitignore` to your `$HOME` directory to ensure it will ignore the `dotfiles` folder where the bare repository lives, as well as your local settings file that you do not want in version control. You can also add any other files here you want to ensure do not get added:
 
@@ -35,7 +49,7 @@ Your computer's dotfiles are a key piece of your development environment. Many o
     echo "dotfiles/" >> $HOME/dotfiles/.gitignore
     ```
 
-5. Create an alias for running git commands in the `dotfiles` repository we just created (you only need to use one of the methods shown here):
+5. Create an alias in your current environment for running git commands in the `dotfiles` repository we just created. Use the same alias we created earlier, as this one will only be used until we have everything up and running:
 
     ```sh
     # Windows
@@ -100,7 +114,7 @@ Your computer's dotfiles are a key piece of your development environment. Many o
     git clone --bare git@github.com:username/dotfiles.git $HOME/dotfiles
     ```
 
-2. Add the alias to the `.bashrc` or `.zshrc` on the new machine:
+2. Add the alias to the `.bashrc` or `.zshrc` on the new machine (this will only be used until we have everything up and running):
 
     ```sh
     # Windows
@@ -153,6 +167,8 @@ Your computer's dotfiles are a key piece of your development environment. Many o
     ```
 
 5. Duplicate the `.dotfiles-local-settings.example` file, and rename it to `.dotfiles-local-settings` (removing `.example`). Now, update the contents of the file to store the machine-specific values for this new computer. These settings will not be tracked in source control.
+
+    Be sure to include the `dotfiles` alias we created in this file so you can access the `dotfiles` command globally.
 
 ## Making updates
 
