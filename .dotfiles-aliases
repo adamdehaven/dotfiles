@@ -1,15 +1,6 @@
 #!/bin/bash
 
 #
-# Dotfiles
-# ---------------------------------------------------
-# Windows alias
-alias dotfiles='/cmd/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
-# Mac alias
-# alias dotfiles='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
-# alias dotfiles='/usr/local/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
-
-#
 # Alias Locations
 # Some are imported in .localsettingsrc
 # ---------------------------------------------------

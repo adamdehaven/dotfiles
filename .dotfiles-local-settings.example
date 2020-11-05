@@ -1,6 +1,15 @@
 #!/bin/bash
 
 #
+# Dotfiles Alias
+# ---------------------------------------------------
+# Windows alias
+# alias dotfiles='/cmd/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
+# Mac alias
+# alias dotfiles='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
+# alias dotfiles='/usr/local/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
+
+#
 # Git Credentials
 # ---------------------------------------------------
 # GIT_AUTHOR_NAME="YOUR_NAME"
