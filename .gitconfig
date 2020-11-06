@@ -41,6 +41,10 @@
   ls = log --pretty=tformat:"%C(green)%h\\ %C(yellow)[%ad]%Cred%d\\ %n%Creset%w(80,4,4)%s%b\\ %C(cyan)[%cN]%n" --decorate --date=local
   # Same pretty log, with changed file list
   lf = log --pretty=tformat:"%C(green)%h\\ %C(yellow)[%ad]%Cred%d\\ %n%Creset%w(80,4,4)%s%b\\ %C(cyan)[%cN]%n" --decorate --date=local --numstat
+    # Assume unchanged
+  au = update-index --assume-unchanged
+  # No assume unchanged
+  nau = update-index --no-assume-unchanged
   # Show files flagged --assume-unchanged
   unchanged = !git ls-files -v | grep "^[[:lower:]]"
   # Show the history of a file, with diffs
