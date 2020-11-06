@@ -36,9 +36,9 @@
 # }
 
 # function getwifipassword() {
-#   bash /d/adam/Development/get-wifi-password/getwifipassword.sh
+#   bash /d/adam/Development/get-wifi-password/getwifipassword.sh "$@"
 # }
 
 # function changegitauthor() {
-#   bash /d/adam/Development/change-git-author/changeauthor.sh
+#   bash /d/adam/Development/change-git-author/changeauthor.sh "$@"
 # }
