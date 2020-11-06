@@ -255,6 +255,7 @@ function sharevm() {
 }
 
 function shrug() {
+  echo ""
   echo "¯\_(ツ)_/¯"
 }
 
