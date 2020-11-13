@@ -8,6 +8,7 @@
 #
 # Alias Commands
 # ---------------------------------------------------
+alias reload='source $HOME/.bashrc'
 alias grep='grep --color=auto'
 # Open in Google Chrome: chrome ~/Desktop/index.html
 alias chrome='/c/Program\ Files\ \(x86\)/Google/Chrome/Application/chrome.exe'
