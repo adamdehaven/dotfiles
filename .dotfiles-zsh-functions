@@ -124,3 +124,19 @@ function renameFileWithRegex() {
 function shrug() {
   echo "¯\_(ツ)_/¯"
 }
+
+# Move the mouse to prevent the machine from going idle
+function keepawake() {
+  if [ -z $1 ]; then
+    DELAY=52
+  else
+    DELAY=$1
+  fi
+
+  while true; do
+    for POSITION in 400 450 500; do
+      cliclick -r -e 100 m:$POSITION,100
+      sleep $DELAY
+    done
+  done
+}
