@@ -1,0 +1,13 @@
+#
+# Alias Locations
+# Some are imported in .dotfiles-zsh-local-settings
+# ---------------------------------------------------
+
+#
+# Alias Commands
+# ---------------------------------------------------
+alias grep='grep --color=auto'
+# Download file to ~/Downloads folder
+# Example: download http://link.zip
+alias download="cd ~/Downloads && curl -O -L "
+alias nah="git reset --hard && git clean -df"

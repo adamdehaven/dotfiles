@@ -1,0 +1,39 @@
+#
+# Dotfiles Alias
+# ---------------------------------------------------
+# Mac alias
+alias dotfiles='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
+# alias dotfiles='/usr/local/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
+
+#
+# Git Credentials
+# ---------------------------------------------------
+# GIT_AUTHOR_NAME="YOUR_NAME"
+# GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
+# git config --global user.name "$GIT_AUTHOR_NAME"
+# GIT_AUTHOR_EMAIL="YOUR_EMAIL"
+# GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
+# git config --global user.email "$GIT_AUTHOR_EMAIL"
+
+#
+# Alias Locations
+# ---------------------------------------------------
+
+# alias dev="cd ~/Development"
+# alias onedrive="cd ~/OneDrive\ -\ Humana"
+
+#
+# Functions
+# ---------------------------------------------------
+
+# function fetchurls() {
+#   bash /d/adam/Development/fetchurls/fetchurls.sh "$@"
+# }
+
+# function getwifipassword() {
+#   bash /d/adam/Development/get-wifi-password/getwifipassword.sh "$@"
+# }
+
+# function changegitauthor() {
+#   bash /d/adam/Development/change-git-author/changeauthor.sh "$@"
+# }
