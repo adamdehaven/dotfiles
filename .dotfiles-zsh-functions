@@ -1,0 +1,131 @@
+#
+# Edit .zshrc in VS Code, and reload file in prompt on EXIT
+# ---------------------------------------------------
+function zshrc() {
+  code ~/.zshrc
+}
+
+#
+# Encryption
+# ---------------------------------------------------
+function decrypt() {
+  # decrypt if selected
+  FILE=$1
+  echo "-> decrypt: $(basename $FILE) "
+  # openssl enc -d -aes-256-cbc -salt -in "$FILE" -out "${FILE/.enc/}"
+  openssl enc -d -aes-256-cbc -md sha512 -pbkdf2 -iter 100000 -salt -in "$FILE" -out "${FILE/.enc/}"
+  FILE=""
+}
+
+function encrypt() {
+  # encrypt if selected
+  FILE=$1
+  echo "-> encrypt: $(basename $FILE) "
+  # openssl enc -e -aes-256-cbc -salt -in "$FILE" -out "$FILE.enc"
+  openssl enc -e -aes-256-cbc -md sha512 -pbkdf2 -iter 100000 -salt -in "$FILE" -out "$FILE.enc"
+  FILE=""
+}
+
+#
+# Find commits by commit message
+# ---------------------------------------------------
+function fc() {
+  git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1
+}
+alias findcommit=fc
+
+#
+# Files and directories
+# ---------------------------------------------------
+# Case insensitive file search, excluding node_modules and AppData directories
+function ff() {
+  find . -type d \( -iname node_modules -o -iname AppData \) -prune -false -o -type f -iname "*$1*"
+}
+alias findfile=ff
+
+# Case insensitive directory search, excluding node_modules and AppData directories
+function fd() {
+  find . -type d \( -iname node_modules -o -iname AppData \) -prune -false -o -type d -iname "*$1*"
+}
+alias finddirectory=fd
+alias findfolder=fd
+
+# Create new directory and change current directory to it
+function mkd() {
+  mkdir -p "$@" && cd "$_"
+}
+
+#
+# Count and display the number of commits in a Git repository, by author
+# The -s option squashes all of the commit messages into the number of commits.
+# The -n option sorts the list by number of commits.
+# Add -e flag to also show email address.
+# ---------------------------------------------------
+commitcount() {
+  # If git repo
+  if response=$(git rev-parse --is-inside-work-tree &>/dev/null) && [ $response=true ]; then
+    git shortlog -sne --no-merges
+  else
+    echo "Error: This is not a git repository."
+  fi
+}
+
+#
+# Display the current git repository's log, by author's name or email address
+# ---------------------------------------------------
+logbyauthor() {
+  # If git repo
+  if response=$(git rev-parse --is-inside-work-tree &>/dev/null) && [ $response=true ]; then
+    if [ $# -gt 0 ]; then
+      git log --author="$1" --oneline --shortstat
+    else
+      echo "Error: You must specify the author's name or email address."
+    fi
+  else
+    echo "Error: This is not a git repository."
+  fi
+}
+
+#
+# Check if program exists from bash
+# ---------------------------------------------------
+caniuse() {
+  if [ "${*:1}" ] >0; then
+    eval PROGRAM='${*:1}'
+  else
+    while true; do
+      read -p "#    Command: " PROGRAM
+      case "$PROGRAM" in
+      [[:alnum:]]*)
+        eval PROGRAM='$PROGRAM'
+        break
+        ;;
+      *) echo "#        Please enter a valid command." ;;
+      esac
+    done
+  fi
+
+  if [ -x "$(command -v $PROGRAM)" ]; then
+    echo "'$PROGRAM' command is available."
+  else
+    echo "'$PROGRAM' command is not available."
+  fi
+}
+
+#
+# Remove parenthesis, text inside, and trailing space from all files in current directory
+# ---------------------------------------------------
+function removeParenthesisInAllFiles() {
+  for f in *'('*')'*; do mv -i "$f" "${f/(*)/}"; done
+}
+
+function renameFileWithRegex() {
+  # Change to whatever
+  regex='(.*) .sfc'
+  # Change file extension, then does replace
+  for f in *.sfc; do [[ $f =~ $regex ]] && mv "$f" "${BASH_REMATCH[1]}.sfc"; done
+}
+
+function shrug() {
+  echo "¯\_(ツ)_/¯"
+}
