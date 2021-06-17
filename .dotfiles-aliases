@@ -15,7 +15,6 @@ alias chrome='/c/Program\ Files\ \(x86\)/Google/Chrome/Application/chrome.exe'
 # Download file to ~/Downloads folder
 # Example: download http://link.zip
 alias download="cd ~/Downloads && curl -O -L "
-alias nah="git reset --hard && git clean -df"
 alias pi="ssh pi@192.168.0.107"
 
 # NPM cli packages

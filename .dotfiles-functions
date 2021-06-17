@@ -46,26 +46,28 @@ function encrypt() {
 #
 # Find commits by commit message
 # ---------------------------------------------------
-function fc() {
-  git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1
+function findcommit() {
+  # If git repo
+  if response=$(git rev-parse --is-inside-work-tree &>/dev/null) && [ $response=true ]; then
+    git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1
+  else
+    echo "Error: This is not a git repository."
+  fi
 }
-alias findcommit=fc
 
 #
 # Files and directories
 # ---------------------------------------------------
 # Case insensitive file search, excluding node_modules and AppData directories
-function ff() {
+function findfile() {
   find . -type d \( -iname node_modules -o -iname AppData \) -prune -false -o -type f -iname "*$1*"
 }
-alias findfile=ff
 
 # Case insensitive directory search, excluding node_modules and AppData directories
-function fd() {
+function finddir() {
   find . -type d \( -iname node_modules -o -iname AppData \) -prune -false -o -type d -iname "*$1*"
 }
-alias finddirectory=fd
-alias findfolder=fd
+alias finddirectory=finddir
 
 # Create new directory and change current directory to it
 function mkd() {
@@ -78,7 +80,7 @@ function mkd() {
 # The -n option sorts the list by number of commits.
 # Add -e flag to also show email address.
 # ---------------------------------------------------
-commitcount() {
+function commitcount() {
   # If git repo
   if response=$(git rev-parse --is-inside-work-tree &>/dev/null) && [ $response=true ]; then
     git shortlog -sne --no-merges
@@ -90,7 +92,7 @@ commitcount() {
 #
 # Display the current git repository's log, by author's name or email address
 # ---------------------------------------------------
-logbyauthor() {
+function logbyauthor() {
   # If git repo
   if response=$(git rev-parse --is-inside-work-tree &>/dev/null) && [ $response=true ]; then
     if [ $# -gt 0 ]; then
@@ -106,7 +108,7 @@ logbyauthor() {
 #
 # Check if program exists from bash
 # ---------------------------------------------------
-caniuse() {
+function caniuse() {
   if [ "${*:1}" ] >0; then
     eval PROGRAM='${*:1}'
   else
@@ -143,95 +145,8 @@ function renameFileWithRegex() {
   for f in *.sfc; do [[ $f =~ $regex ]] && mv "$f" "${BASH_REMATCH[1]}.sfc"; done
 }
 
-#
-# Post to Slack
-# ---------------------------------------------------
-posttoslack() {
-  # Set Slack webhook URL
-  SLACK_WEBHOOK_URL=""
-  # Prompt user for Slack #channel or @username
-  while true; do
-    read -p "#
-  #    Post to channel or username: " "CHANNEL"
-    case "$CHANNEL" in
-    [\#\@][[:lower:]-_]*)
-      eval SUCCESSMESSAGE="$CHANNEL"
-      eval CHANNEL='\"channel\":"\"$CHANNEL\"",'
-      break
-      ;;
-    *) echo "         Please enter a valid channel or username.
-#        Example: #general or @adamdehaven" ;;
-    esac
-  done
-  # Prompt user for "send as" name
-  while true; do
-    read -p "#    Post as: " USERNAME
-    case "$USERNAME" in
-    [nN][oO] | [dD][eE][fF][aA][uU][lL][tT])
-      eval USERNAME=""
-      break
-      ;;
-    [[:alnum:][:space:][:punct:]]*)
-      eval USERNAME='\"username\":"\"$USERNAME\"",'
-      break
-      ;;
-    *) echo "         Please enter a valid username (nothing offensive)." ;;
-    esac
-  done
-  # Prompt user for icon emoji
-  while true; do
-    read -p "#    Icon Emoji: " EMOJI
-    case "$EMOJI" in
-    [:][[:lower:]]*[:])
-      eval EMOJI='\"icon_emoji\":"\"$EMOJI\"",'
-      break
-      ;;
-    [nN][oO])
-      eval EMOJI=""
-      break
-      ;;
-    *) echo "         Please enter a valid emoji code. Example: :ghost:" ;;
-    esac
-  done
-  # Prompt user for icon emoji
-  while true; do
-    read -p "#    Icon Url: " ICONURL
-    case "$ICONURL" in
-    [http][[:alnum:][:punct:]]* | [https][[:alnum:][:punct:]]*)
-      eval ICONURL='\"icon_url\":"\"$ICONURL\"",'
-      break
-      ;;
-    [nN][oO])
-      eval ICONURL=""
-      break
-      ;;
-    *) echo "         Please enter a valid url." ;;
-    esac
-  done
-  # Prompt user for message
-  while true; do
-    read -r -p "#    Message to post: " MESSAGE
-    case "$MESSAGE" in
-    [[:alnum:][:blank:][:punct:][:space:]]*)
-      eval MESSAGE='\"text\":"\"$MESSAGE\""'
-      break
-      ;;
-    *) echo "         Please enter a valid message." ;;
-    esac
-  done
-  # Encode &, <, and > for Slack
-  MESSAGE=${MESSAGE//&/&amp;}
-  MESSAGE=${MESSAGE//</&lt;}
-  MESSAGE=${MESSAGE//>/&gt;}
-
-  apiResponse=$(curl -s -X POST -H 'Content-type: application/json' --data '{'"$CHANNEL""$USERNAME""$EMOJI""$ICONURL""$MESSAGE"'}' $SLACK_WEBHOOK_URL)
-
-  # Output response
-  if [ "$apiResponse" = "ok" ]; then
-    echo "#    Posted successfully to $SUCCESSMESSAGE"
-  else
-    echo "#    API ERROR: $apiResponse"
-  fi
+function shrug() {
+  echo "¯\_(ツ)_/¯"
 }
 
 #
@@ -252,10 +167,6 @@ function sharevm() {
   echo "#    ngrok statement copied to clipboard"
   echo "#    Opening Windows Command Prompt..."
   start cmd.exe
-}
-
-function shrug() {
-  echo "¯\_(ツ)_/¯"
 }
 
 #

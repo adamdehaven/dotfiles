@@ -1,11 +1,4 @@
 #
-# Edit .zshrc in VS Code, and reload file in prompt on EXIT
-# ---------------------------------------------------
-function zshrc() {
-  code ~/.zshrc
-}
-
-#
 # Encryption
 # ---------------------------------------------------
 function decrypt() {
@@ -29,26 +22,28 @@ function encrypt() {
 #
 # Find commits by commit message
 # ---------------------------------------------------
-function fc() {
-  git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1
+function findcommit() {
+  # If git repo
+  if response=$(git rev-parse --is-inside-work-tree &>/dev/null) && [ $response=true ]; then
+    git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1
+  else
+    echo "Error: This is not a git repository."
+  fi
 }
-alias findcommit=fc
 
 #
 # Files and directories
 # ---------------------------------------------------
 # Case insensitive file search, excluding node_modules and AppData directories
-function ff() {
+function findfile() {
   find . -type d \( -iname node_modules -o -iname AppData \) -prune -false -o -type f -iname "*$1*"
 }
-alias findfile=ff
 
 # Case insensitive directory search, excluding node_modules and AppData directories
-function fd() {
+function finddir() {
   find . -type d \( -iname node_modules -o -iname AppData \) -prune -false -o -type d -iname "*$1*"
 }
-alias finddirectory=fd
-alias findfolder=fd
+alias finddirectory=finddir
 
 # Create new directory and change current directory to it
 function mkd() {
@@ -61,7 +56,7 @@ function mkd() {
 # The -n option sorts the list by number of commits.
 # Add -e flag to also show email address.
 # ---------------------------------------------------
-commitcount() {
+function commitcount() {
   # If git repo
   if response=$(git rev-parse --is-inside-work-tree &>/dev/null) && [ $response=true ]; then
     git shortlog -sne --no-merges
@@ -73,7 +68,7 @@ commitcount() {
 #
 # Display the current git repository's log, by author's name or email address
 # ---------------------------------------------------
-logbyauthor() {
+function logbyauthor() {
   # If git repo
   if response=$(git rev-parse --is-inside-work-tree &>/dev/null) && [ $response=true ]; then
     if [ $# -gt 0 ]; then
@@ -89,7 +84,7 @@ logbyauthor() {
 #
 # Check if program exists from bash
 # ---------------------------------------------------
-caniuse() {
+function caniuse() {
   if [ "${*:1}" ] >0; then
     eval PROGRAM='${*:1}'
   else
