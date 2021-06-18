@@ -126,17 +126,18 @@ function shrug() {
 }
 
 # Move the mouse to prevent the machine from going idle
+# Accepts a number as the first argument that indicates the
+# number of seconds between mouse movements.
 function keepawake() {
   if [ -z $1 ]; then
-    DELAY=52
+    # Default delay of 3 minutes
+    DELAY=180
   else
     DELAY=$1
   fi
 
   while true; do
-    for POSITION in 400 450 500; do
-      cliclick -r -e 100 m:$POSITION,100
-      sleep $DELAY
-    done
+    cliclick -r -e 200 m:+100,+100
+    sleep $DELAY
   done
 }
