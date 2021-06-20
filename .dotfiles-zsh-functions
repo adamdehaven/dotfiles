@@ -129,6 +129,13 @@ function shrug() {
 # Accepts a number as the first argument that indicates the
 # number of seconds between mouse movements.
 function keepawake() {
+  if ! [ -x "$(command -v cliclick)" ]; then
+    echo "Error: cliclick is not installed." >&2
+    echo "You can install from Homebrew:"
+    echo "$ brew install cliclick"
+    return
+  fi
+
   if [ -z $1 ]; then
     # Default delay of 3 minutes
     DELAY=180
