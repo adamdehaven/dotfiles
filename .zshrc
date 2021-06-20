@@ -8,8 +8,14 @@ fi
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:~/.npm-global/bin:$PATH
 
-# Path to your oh-my-zsh installation.
-export ZSH="/Users/adehaven/.oh-my-zsh"
+#
+# Load dotfiles
+# Files are named: .dotfiles-zsh-*
+# ---------------------------------------------------
+for file in ~/.dotfiles-zsh-{aliases,functions,local-settings}; do
+  [ -r "$file" ] && [ -f "$file" ] && source "$file"
+done
+unset file
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -109,15 +115,6 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-
-#
-# Load dotfiles
-# Files are named: .dotfiles-zsh-*
-# ---------------------------------------------------
-for file in ~/.dotfiles-zsh-{aliases,functions,local-settings}; do
-  [ -r "$file" ] && [ -f "$file" ] && source "$file"
-done
-unset file
 
 # Hide machine name in prompt (for agnoster theme ONLY)
 # https://github.com/ohmyzsh/ohmyzsh/blob/00ec11d3c0a2b2b7413ad84940ddec299aafbb04/themes/agnoster.zsh-theme#L63
