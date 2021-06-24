@@ -137,8 +137,8 @@ function keepawake() {
   fi
 
   if [ -z $1 ]; then
-    # Default delay of 3 minutes
-    DELAY=180
+    # Default delay of 4.5 minutes
+    DELAY=270
   else
     DELAY=$1
   fi
